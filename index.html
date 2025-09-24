@@ -3,18 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drag and Drop App</title>
+  <title>Daily Skills - Color Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Drag and Drop App</h1>
+  <h1>Color Drag-and-Drop Game</h1>
 
+  <!-- Prompt Section -->
+  <div id="prompt"></div>
+  <button id="speakBtn">🔊 Hear Prompt</button>
+
+  <!-- Images to drag -->
   <div class="container">
-    <div class="draggable" draggable="true" id="item1">Item 1</div>
-    <div class="draggable" draggable="true" id="item2">Item 2</div>
+    <img src="https://via.placeholder.com/100/FF0000/FFFFFF?text=Red" 
+         draggable="true" id="red" class="draggable">
+    <img src="https://via.placeholder.com/100/0000FF/FFFFFF?text=Blue" 
+         draggable="true" id="blue" class="draggable">
+    <img src="https://via.placeholder.com/100/00FF00/FFFFFF?text=Green" 
+         draggable="true" id="green" class="draggable">
   </div>
 
-  <div class="dropzone" id="dropzone">Drop items here</div>
+  <!-- Drop zone -->
+  <div class="dropzone" id="dropzone">Drop your answer here</div>
+
+  <!-- Feedback -->
+  <div id="feedback"></div>
 
   <script src="script.js"></script>
 </body>
