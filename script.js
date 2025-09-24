@@ -4,8 +4,14 @@ const speakBtn = document.getElementById('speakBtn');
 const promptEl = document.getElementById('prompt');
 const optionsContainer = document.getElementById('options');
 const scoreEl = document.getElementById('score');
+const nextBtn = document.getElementById('nextBtn');
+const restartBtn = document.getElementById('restartBtn');
+const progressEl = document.getElementById('progress');
 
-// Color list with hex codes
+// Audio
+const correctSound = new Audio('correct.mp3'); // Upload this file to your repo
+const wrongSound = new Audio('wrong.mp3'); // Upload this file to your repo
+
 const colors = {
   black: "#000000",
   blue: "#0000FF",
@@ -23,80 +29,91 @@ const colors = {
 let correctAnswer = "";
 let score = 0;
 let attempts = 0;
+let round = 0;
+const totalRounds = 10;
 
-// Utility: pick N random unique items from array
+// Utility: pick N random unique items
 function getRandomChoices(array, n) {
   let shuffled = [...array].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, n);
 }
 
-// Start a new round
+// Start new round
 function newRound() {
-  // Pick correct answer
-  const colorNames = Object.keys(colors);
-  correctAnswer = colorNames[Math.floor(Math.random() * colorNames.length)];
+  if (round >= totalRounds) {
+    feedback.textContent = `🎉 Game over! Final Score: ${score} / ${attempts}`;
+    feedback.style.color = "blue";
+    optionsContainer.innerHTML = "";
+    dropzone.textContent = "Game Finished!";
+    nextBtn.style.display = "none";
+    restartBtn.style.display = "inline-block";
+    promptEl.textContent = "";
+    return;
+  }
 
-  // Pick 2 wrong answers
-  let wrongs = colorNames.filter(c => c !== correctAnswer);
+  round++;
+  progressEl.textContent = `Round: ${round} / ${totalRounds}`;
+  correctAnswer = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)];
+
+  let wrongs = Object.keys(colors).filter(c => c !== correctAnswer);
   let choices = [correctAnswer, ...getRandomChoices(wrongs, 2)];
-  choices = choices.sort(() => 0.5 - Math.random()); // shuffle
+  choices = choices.sort(() => 0.5 - Math.random());
 
-  // Update prompt
   promptEl.innerHTML = `Which one is <strong>${correctAnswer}</strong>?`;
   feedback.textContent = "";
   dropzone.textContent = "Drop your answer here";
+  nextBtn.style.display = "none";
 
-  // Render options
-  // Render options
-optionsContainer.innerHTML = "";
-choices.forEach(color => {
-  const div = document.createElement("div");
-  div.classList.add("draggable");
-  div.id = color;
-  div.style.backgroundColor = colors[color];
-  div.setAttribute("draggable", "true");
+  // Render color options
+  optionsContainer.innerHTML = "";
+  choices.forEach(color => {
+    const div = document.createElement("div");
+    div.classList.add("draggable");
+    div.id = color;
+    div.style.backgroundColor = colors[color];
+    div.setAttribute("draggable", "true");
 
-  // Add text label
-  const label = document.createElement("span");
-  label.textContent = color.charAt(0).toUpperCase() + color.slice(1);
-  label.style.color = (color === "black" || color === "brown" || color === "purple") ? "white" : "black";
-  label.style.fontWeight = "bold";
-  div.appendChild(label);
+    const label = document.createElement("span");
+    label.textContent = color.charAt(0).toUpperCase() + color.slice(1);
+    label.style.color = (color === "black" || color === "brown" || color === "purple") ? "white" : "black";
+    label.style.fontWeight = "bold";
+    div.appendChild(label);
 
-  optionsContainer.appendChild(div);
+    optionsContainer.appendChild(div);
 
-  // Drag start event
-  div.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text/plain', div.id);
+    // Drag event
+    div.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', div.id);
+    });
+
+    // Click / Tap event
+    div.addEventListener('click', () => handleAnswer(color));
   });
-});
-
 }
 
-// Allow drop
-dropzone.addEventListener('dragover', (e) => {
-  e.preventDefault();
-});
-
-// Handle drop
-dropzone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  const id = e.dataTransfer.getData('text/plain');
+// Handle answer (drag or click)
+function handleAnswer(selectedColor) {
   attempts++;
-
-  if (id === correctAnswer) {
+  if (selectedColor === correctAnswer) {
     score++;
     feedback.textContent = `✅ Correct! That is ${correctAnswer}.`;
     feedback.style.color = "green";
-    updateScore();
-
-    // Start new round after 2 sec
-    setTimeout(newRound, 2000);
+    correctSound.play();
+    nextBtn.style.display = "inline-block";
   } else {
     feedback.textContent = "❌ Try again!";
     feedback.style.color = "red";
-    updateScore();
+    wrongSound.play();
   }
+  updateScore();
+}
+
+// Drag & Drop
+dropzone.addEventListener('dragover', (e) => e.preventDefault());
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  handleAnswer(id);
 });
 
 // Update score display
@@ -108,6 +125,21 @@ function updateScore() {
 speakBtn.addEventListener('click', () => {
   const utterance = new SpeechSynthesisUtterance(`Which one is ${correctAnswer}?`);
   speechSynthesis.speak(utterance);
+});
+
+// Next Question button
+nextBtn.addEventListener('click', () => {
+  newRound();
+});
+
+// Restart Game button
+restartBtn.addEventListener('click', () => {
+  score = 0;
+  attempts = 0;
+  round = 0;
+  restartBtn.style.display = "none";
+  newRound();
+  updateScore();
 });
 
 // Start first round
