@@ -13,21 +13,15 @@
   <div id="prompt"></div>
   <button id="speakBtn">🔊 Hear Prompt</button>
 
-  <!-- Images to drag -->
-  <div class="container">
-    <img src="https://via.placeholder.com/100/FF0000/FFFFFF?text=Red" 
-         draggable="true" id="red" class="draggable">
-    <img src="https://via.placeholder.com/100/0000FF/FFFFFF?text=Blue" 
-         draggable="true" id="blue" class="draggable">
-    <img src="https://via.placeholder.com/100/00FF00/FFFFFF?text=Green" 
-         draggable="true" id="green" class="draggable">
-  </div>
+  <!-- Container for 3 color options -->
+  <div class="container" id="options"></div>
 
   <!-- Drop zone -->
   <div class="dropzone" id="dropzone">Drop your answer here</div>
 
-  <!-- Feedback -->
+  <!-- Feedback + Score -->
   <div id="feedback"></div>
+  <div id="score">Score: 0 / 0</div>
 
   <script src="script.js"></script>
 </body>
