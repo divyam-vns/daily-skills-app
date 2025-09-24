@@ -23,6 +23,13 @@ body {
   cursor: grab;
   border-radius: 10px;
   border: 2px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
 }
 
 .dropzone {
