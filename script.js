@@ -47,20 +47,30 @@ function newRound() {
   dropzone.textContent = "Drop your answer here";
 
   // Render options
-  optionsContainer.innerHTML = "";
-  choices.forEach(color => {
-    const div = document.createElement("div");
-    div.classList.add("draggable");
-    div.id = color;
-    div.style.backgroundColor = colors[color];
-    div.setAttribute("draggable", "true");
-    optionsContainer.appendChild(div);
+  // Render options
+optionsContainer.innerHTML = "";
+choices.forEach(color => {
+  const div = document.createElement("div");
+  div.classList.add("draggable");
+  div.id = color;
+  div.style.backgroundColor = colors[color];
+  div.setAttribute("draggable", "true");
 
-    // Drag start event
-    div.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', div.id);
-    });
+  // Add text label
+  const label = document.createElement("span");
+  label.textContent = color.charAt(0).toUpperCase() + color.slice(1);
+  label.style.color = (color === "black" || color === "brown" || color === "purple") ? "white" : "black";
+  label.style.fontWeight = "bold";
+  div.appendChild(label);
+
+  optionsContainer.appendChild(div);
+
+  // Drag start event
+  div.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('text/plain', div.id);
   });
+});
+
 }
 
 // Allow drop
