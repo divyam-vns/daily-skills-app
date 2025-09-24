@@ -30,8 +30,6 @@ body {
   text-transform: capitalize;
 }
 
-}
-
 .dropzone {
   width: 300px;
   height: 150px;
@@ -50,8 +48,45 @@ body {
   font-weight: bold;
 }
 
+#progress {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
 #score {
   margin-top: 10px;
   font-size: 18px;
   color: #333;
 }
+
+#nextBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#nextBtn:hover {
+  background-color: #217dbb;
+}
+
+#restartBtn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#restartBtn:hover {
+  background-color: #1e8449;
+}
+
